@@ -1,0 +1,27 @@
+defmodule Gravitas.BaseFact.Holder do
+  use GenServer
+
+  @moduledoc """
+  Hold the state described by gathering Cloud ressources facts
+  """
+  @spec start_link([]) :: :ignore | {:error, any()} | {:ok, pid()}
+  def start_link(default) when is_list(default) do
+    GenServer.start_link(__MODULE__, default, name: __MODULE__)
+  end
+
+  @spec update_ec2(any()) :: any()
+  def update_ec2(ec2_state) do
+    GenServer.call(__MODULE__, {:ec2_update, ec2_state})
+  end
+
+  @impl true
+  @spec init(any()) :: {:ok, Gravitas.BaseFact.t()}
+  def init(_args) do
+    {:ok, %Gravitas.BaseFact{}}
+  end
+
+  @impl true
+  def handle_call({:ec2_update, ec2_state}, _from, state) do
+    {:noreply, %{state | ec2: ec2_state}}
+  end
+end
