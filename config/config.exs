@@ -29,4 +29,4 @@ use Mix.Config
 #
 #     import_config "#{Mix.env()}.exs"
 
-config :gravitas, :repo_path_list, ["~/Projects/test_repo_grav"]
+config :gravitas, repo_path_list: ["~/Projects/test_repo_grav"], local_git_store: "priv/repo"

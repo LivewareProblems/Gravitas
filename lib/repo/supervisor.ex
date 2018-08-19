@@ -14,7 +14,7 @@ defmodule Gravitas.Repo.Supervisor do
 
     children = [
       {Gravitas.Repo.Holder, [repo_path]},
-      {Gravitas.Repo.Updater, []}
+      {Gravitas.Repo.EventSupervisor, []}
     ]
 
     Supervisor.init(children, strategy: :rest_for_one)
