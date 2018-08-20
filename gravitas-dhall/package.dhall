@@ -1,0 +1,1 @@
+{ AWS = ./AWS/package.dhall }
