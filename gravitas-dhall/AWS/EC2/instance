@@ -34,6 +34,8 @@ in  let Instance
               Optional Text
           , tags :
               List Tag
+          , region :
+              Optional Text
           }
 
 in  Instance
