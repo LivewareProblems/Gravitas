@@ -2,9 +2,9 @@
 `instance` provide the type to generate EC2 instances
 
 -}
-    let SecurityGroup = ./securityGroup
+    let SecurityGroup = ./aws.ec2.securityGroup.dhall
 
-in  let Tag = ./../tag
+in  let Tag = ./aws.ec2.tag.dhall
 
 in  let Instance
         : Type
