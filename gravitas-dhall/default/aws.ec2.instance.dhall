@@ -18,7 +18,7 @@
     , tenancy =
         [] : Optional Text
     , ebs_optimized =
-        [] : Optional Text
+        [] : Optional Bool
     , disable_api_termination =
         [] : Optional Bool
     , key_name =
@@ -30,7 +30,7 @@
     , subnet_id =
         [] : Optional Text
     , associate_public_ip =
-        [] : Optional Bools
+        [] : Optional Bool
     , iam_instance_profile =
         [] : Optional Text
     , tags =
