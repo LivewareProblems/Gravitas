@@ -2,7 +2,7 @@
 
 An agent to control your infrastructure.
 
-The main goal of Gravitas is to provide help in managing your cloud infrastructure, without overly taxing cognitive activity from the user.
+The main goal of Gravitas is to provide help in managing your cloud infrastructure, without significant mental overhead for the user.
 
 ## Values
 
