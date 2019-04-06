@@ -14,6 +14,10 @@ defmodule Gravitas.BaseFact.Holder do
     GenServer.call(__MODULE__, {:ec2_update, ec2_state})
   end
 
+  def update_DO(do_region_info) do
+    GenServer.call(__MODULE__, {:do_update, do_region_info})
+  end
+
   @impl true
   @spec init(any()) :: {:ok, Gravitas.BaseFact.t()}
   def init(_args) do
@@ -23,5 +27,9 @@ defmodule Gravitas.BaseFact.Holder do
   @impl true
   def handle_call({:ec2_update, ec2_state}, _from, state) do
     {:noreply, %{state | ec2: ec2_state}}
+  end
+
+  def handle_call({:do_update, do_state}, _from, state) do
+    {:noreply, %{state | do: do_state}}
   end
 end

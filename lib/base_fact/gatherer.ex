@@ -11,34 +11,33 @@ defmodule Gravitas.BaseFact.Gatherer do
   end
 
   @impl true
-  @spec init(any()) :: {:ok, %{ec2: nil}, {:continue, :ec2}}
+  @spec init(any()) :: {:ok, :DO, {:continue, :DO}}
   def init(_args) do
-    {:ok, %{ec2: nil}, {:continue, :ec2}}
+    {:ok, :DO, {:continue, :DO}}
   end
 
   @impl true
-  @spec handle_continue(:ec2, %{ec2: any()}) :: {:noreply, %{ec2: nil | [{any(), any()}] | map()}}
-  def handle_continue(:ec2, state) do
-    ec2_instances = update_ec2_instances()
+  @spec handle_continue(:DO, :DO) :: {:noreply, :DO}
+  def handle_continue(:DO, _state) do
+    DO_instances = update_DO_instances()
     schedule_fetch()
-    {:noreply, %{state | ec2: ec2_instances}}
+    {:noreply, :DO}
   end
 
   @impl true
-  def handle_info({:describe, :ec2}, state) do
-    ec2_instances = update_ec2_instances()
+  def handle_info({:describe, :DO}, _state) do
+    DO_instances = update_DO_instances()
     schedule_fetch()
-    {:noreply, %{state | ec2: ec2_instances}}
+    {:noreply, :DO}
   end
 
   defp schedule_fetch(interval \\ 60_000_000) do
-    Process.send_after(self(), {:describe, :ec2}, interval)
+    Process.send_after(self(), {:describe, :DO}, interval)
   end
 
-  defp update_ec2_instances() do
-    {:ok, ec2_content} = ExAws.EC2.describe_instances() |> ExAws.request()
-    {:ok, ec2_instances} = Poison.decode(ec2_content[:body])
-    Gravitas.BaseFact.Holder.update_ec2(ec2_instances["regionInfo"])
-    ec2_instances
+  defp update_DO_instances() do
+    {:ok, do_droplets} = Gravitas.Providers.DigitalOcean.Droplets.list_all_droplets()
+    Gravitas.BaseFact.Holder.update_DO(do_droplets)
+    do_droplets
   end
 end
