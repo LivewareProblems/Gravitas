@@ -10,7 +10,12 @@ defmodule Gravitas.Repo.Supervisor do
   @spec init(args :: term()) ::
           {:ok, {:supervisor.sup_flags(), [:supervisor.child_spec()]}} | :ignore
   def init(_arg) do
-    repo_path = List.first(Application.get_env(:gravitas, :repo_path_list))
+    repo_path =
+      Application.get_env(
+        :gravitas,
+        :table_repo_state_path,
+        Application.app_dir(:gravitas, "priv")
+      )
 
     children = [
       {Gravitas.Repo.Holder, [repo_path]},

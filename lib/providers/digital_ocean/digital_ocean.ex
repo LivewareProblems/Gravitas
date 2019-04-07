@@ -1,7 +1,5 @@
 defmodule Gravitas.Providers.DigitalOcean do
   def request(method, url, data, headers \\ [], config \\ []) do
-    # opts = Application.get_env(:gravitas, :do_hackney_opts, @default_opts)
-
     body =
       case data do
         [] -> "{}"
@@ -22,7 +20,7 @@ defmodule Gravitas.Providers.DigitalOcean do
     with {:ok, full_headers} <- full_headers do
       safe_url = URI.encode(url)
 
-      case :hackney.request(
+      case hackney_request(
              method,
              safe_url,
              req_body,
@@ -76,6 +74,27 @@ defmodule Gravitas.Providers.DigitalOcean do
       headers,
       config
     )
+  end
+
+  @default_opts [recv_timeout: 30_000]
+
+  def hackney_request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
+    opts =
+      Application.get_env(:gravitas, :do_options, %{})
+      |> Map.get(:hackney_opts, @default_opts)
+
+    opts = http_opts ++ [:with_body | opts]
+
+    case :hackney.request(method, url, headers, body, opts) do
+      {:ok, status, headers} ->
+        {:ok, %{status_code: status, headers: headers}}
+
+      {:ok, status, headers, body} ->
+        {:ok, %{status_code: status, headers: headers, body: body}}
+
+      {:error, reason} ->
+        {:error, %{reason: reason}}
+    end
   end
 
   @doc """

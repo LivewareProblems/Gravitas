@@ -19,25 +19,24 @@ defmodule Gravitas.BaseFact.Gatherer do
   @impl true
   @spec handle_continue(:DO, :DO) :: {:noreply, :DO}
   def handle_continue(:DO, _state) do
-    DO_instances = update_DO_instances()
+    update_DO_instances()
     schedule_fetch()
     {:noreply, :DO}
   end
 
   @impl true
   def handle_info({:describe, :DO}, _state) do
-    DO_instances = update_DO_instances()
+    update_DO_instances()
     schedule_fetch()
     {:noreply, :DO}
   end
 
-  defp schedule_fetch(interval \\ 60_000_000) do
+  defp schedule_fetch(interval \\ 300_000_000) do
     Process.send_after(self(), {:describe, :DO}, interval)
   end
 
   defp update_DO_instances() do
     {:ok, do_droplets} = Gravitas.Providers.DigitalOcean.Droplets.list_all_droplets()
     Gravitas.BaseFact.Holder.update_DO(do_droplets)
-    do_droplets
   end
 end

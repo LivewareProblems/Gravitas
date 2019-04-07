@@ -26,10 +26,11 @@ defmodule Gravitas.BaseFact.Holder do
 
   @impl true
   def handle_call({:ec2_update, ec2_state}, _from, state) do
-    {:noreply, %{state | ec2: ec2_state}}
+    {:reply, :ok, %{state | ec2: ec2_state}}
   end
 
   def handle_call({:do_update, do_state}, _from, state) do
-    {:noreply, %{state | do: do_state}}
+    IO.puts("hello")
+    {:reply, :ok, %{state | do: do_state}}
   end
 end

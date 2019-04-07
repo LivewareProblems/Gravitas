@@ -22,9 +22,7 @@ defmodule Gravitas.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_aws, "~> 2.1"},
-      {:ex_aws_ec2, "~> 2.0"},
-      {:poison, "~> 3.0"},
+      {:jason, "~> 1.1"},
       {:hackney, "~> 1.9"}
     ]
   end

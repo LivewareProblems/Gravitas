@@ -4,7 +4,7 @@ defmodule Gravitas.Repo.Holder do
   @moduledoc """
   This server hold a DETS table with all the git repo in our app
   A row store the following things
-  {name_uses_in_gravitas, remote path, event_type, :init | :ready | :remove}
+  {name_used_in_gravitas, remote path, event_type, :init | :ready | :remove}
   If a new row is added, it starts an event generator process named
   "name_used_in_gravitas". Once a repo is cloned succesfuly we expect the
   event generator to come back and ask to put the state in :ready.
@@ -14,9 +14,9 @@ defmodule Gravitas.Repo.Holder do
 
   @type repo_row :: {Path.t(), String.t(), Gravitas.Repo.event_type(), :init | :ready | :remove}
 
-  @spec start_link(%{name: atom, dir_path: Path.t()}) :: :ignore | {:error, any()} | {:ok, pid()}
-  def start_link(default) when is_map(default) do
-    GenServer.start_link(__MODULE__, default, name: __MODULE__)
+  @spec start_link(Path.t()) :: :ignore | {:error, any()} | {:ok, pid()}
+  def start_link(default) do
+    GenServer.start_link(__MODULE__, %{dir_path: default, name: __MODULE__}, name: __MODULE__)
   end
 
   @spec add_repo(String.t(), Gravitas.Repo.event_type()) :: any()
@@ -64,7 +64,7 @@ defmodule Gravitas.Repo.Holder do
       |> String.split(":", trim: true)
       |> List.last()
 
-    :dets.insert_new(dets_name, {local_path, remote_path, event_type, :init})
+    :dets.insert(dets_name, {local_path, remote_path, event_type, :init})
 
     Gravitas.Repo.EventGenerator.start_event_generator(%{
       type: event_type,

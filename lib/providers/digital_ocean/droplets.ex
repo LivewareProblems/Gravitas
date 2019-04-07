@@ -8,7 +8,7 @@ defmodule Gravitas.Providers.DigitalOcean.Droplets do
       |> Map.put(:http_method, :get)
 
     case DigitalOcean.perform(operation, DigitalOcean.Config.new(override_opts)) do
-      {:ok, resp} -> Jason.decode!(resp) |> Map.get("region_info", [])
+      {:ok, resp} -> {:ok, Jason.decode!(resp[:body]) |> Map.get("region_info", [])}
       {:error, reason} -> {:error, reason}
     end
   end

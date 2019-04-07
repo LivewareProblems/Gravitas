@@ -27,6 +27,14 @@ use Mix.Config
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 #
-#     import_config "#{Mix.env()}.exs"
+import_config "#{Mix.env()}.secret.exs"
 
-config :gravitas, repo_path_list: ["~/Projects/test_repo_grav"], local_git_store: "priv/repo"
+config :gravitas,
+  repo_path_list: ["~/Projects/test_repo_grav"],
+  local_git_store: "priv/repo",
+  table_repo_state_path: "tmp"
+
+config :gravitas,
+  do_options: %{
+    do_oauth_token: "34dbf5086a54adfee1aeeb0b8b84fb6c086cf8bb1bf1b9a7484760878e047975"
+  }

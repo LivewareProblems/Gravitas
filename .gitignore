@@ -24,3 +24,13 @@ gravitas-*.tar
 
 /.elixir_ls/
 /.vscode/
+
+*.secret.exs
+dev.secret.exs
+test.secret.exs
+
+
+# ignore local test directories
+/tmp/
+/priv/repo/
+/priv/repo_holder.dets
