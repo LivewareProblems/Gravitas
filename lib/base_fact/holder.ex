@@ -31,7 +31,6 @@ defmodule Gravitas.BaseFact.Holder do
   end
 
   def handle_call({:do_update, do_state}, _from, state) do
-    IO.puts("hello")
     {:reply, :ok, %{state | do: do_state}}
   end
 end
