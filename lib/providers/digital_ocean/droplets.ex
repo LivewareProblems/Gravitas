@@ -1,6 +1,7 @@
 defmodule Gravitas.Providers.DigitalOcean.Droplets do
   alias Gravitas.Providers.DigitalOcean
 
+  @spec list_all_droplets([list()]) :: {:error, any()} | {:ok, any()}
   def list_all_droplets(override_opts \\ []) do
     operation =
       DigitalOcean.Operation.new()
@@ -9,6 +10,19 @@ defmodule Gravitas.Providers.DigitalOcean.Droplets do
 
     case DigitalOcean.perform(operation, DigitalOcean.Config.new(override_opts)) do
       {:ok, resp} -> {:ok, Jason.decode!(resp[:body]) |> Map.get("region_info", [])}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  @spec get_droplets_by_id(integer() | String.t(), list()) :: {:error, any()} | {:ok, any()}
+  def get_droplets_by_id(id, override_opts \\ []) do
+    operation =
+      DigitalOcean.Operation.new()
+      |> Map.put(:path, "/v2/droplets/" <> to_string(id))
+      |> Map.put(:http_method, :get)
+
+    case DigitalOcean.perform(operation, DigitalOcean.Config.new(override_opts)) do
+      {:ok, resp} -> {:ok, Jason.decode!(resp[:body]) |> Map.get("droplet", %{})}
       {:error, reason} -> {:error, reason}
     end
   end

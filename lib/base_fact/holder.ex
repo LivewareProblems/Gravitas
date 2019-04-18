@@ -14,6 +14,7 @@ defmodule Gravitas.BaseFact.Holder do
     GenServer.call(__MODULE__, {:ec2_update, ec2_state})
   end
 
+  @spec update_DO(any()) :: any()
   def update_DO(do_region_info) do
     GenServer.call(__MODULE__, {:do_update, do_region_info})
   end
