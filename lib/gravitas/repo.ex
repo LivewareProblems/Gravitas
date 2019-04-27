@@ -14,4 +14,9 @@ defmodule Gravitas.Repo do
   def delete_repo(repo_name) do
     Repo.Holder.remove_repo(repo_name)
   end
+
+  @spec force_update(String.t(), event_type()) :: any()
+  def force_update(repo_name, event_type) do
+    send({:via, Registry, {Registry.Gravitas, repo_name}}, {:fetch, event_type})
+  end
 end

@@ -1,5 +1,5 @@
 defmodule Gravitas.Repo.EventGenerator do
-  use GenServer
+  use GenServer, restart: :transient
   alias Gravitas.Repo
 
   @moduledoc """
@@ -26,7 +26,7 @@ defmodule Gravitas.Repo.EventGenerator do
 
   @spec terminate_event_generator(String.t()) :: :ok | {:error, :not_found}
   def terminate_event_generator(repo_name) do
-    Repo.EventSupervisor.terminate_child(repo_name)
+    GenServer.stop({:via, Registry, {Registry.Gravitas, repo_name}}, :normal)
   end
 
   @impl true

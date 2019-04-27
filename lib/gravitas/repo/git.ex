@@ -17,6 +17,7 @@ defmodule Gravitas.Repo.Git do
     end)
   end
 
+  @spec cleanup(Path.t()) :: [binary()]
   def cleanup(repo_name) do
     repo_name
     |> local_path()
