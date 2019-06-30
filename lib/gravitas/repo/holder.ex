@@ -8,8 +8,8 @@ defmodule Gravitas.Repo.Holder do
   If a new row is added, it starts an event generator process named
   "name_used_in_gravitas". Once a repo is cloned succesfuly we expect the
   event generator to come back and ask to put the state in :ready.
-  A repo can be removed, which delete the event generator then remove the repo from disc
-  and then remove the row of the repo.
+  A repo can be removed, which delete the event generator then remove the repo
+  from disk and then remove the row of the repo.
   """
 
   @type repo_row :: {Path.t(), String.t(), Gravitas.Repo.event_type(), :init | :ready | :remove}
