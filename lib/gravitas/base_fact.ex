@@ -1,9 +1,9 @@
 defmodule Gravitas.BaseFact do
-  @moduledoc """
-  to be used for the BaseFact.Holder state
-  """
-  defstruct ec2: [],
-            do: []
+  alias Gravitas.BaseFact
 
-  @type t :: %Gravitas.BaseFact{ec2: [], do: []}
+  @spec start_base_fact(%{repo_name: String.t()}) :: DynamicSupervisor.on_start_child()
+  def start_base_fact(default) when is_map(default) do
+    spec = {BaseFact.Supervisor, [default]}
+    Gravitas.Project.BaseFactsSupervisor.start_child(spec)
+  end
 end

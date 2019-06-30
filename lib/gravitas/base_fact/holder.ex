@@ -20,9 +20,9 @@ defmodule Gravitas.BaseFact.Holder do
   end
 
   @impl true
-  @spec init(any()) :: {:ok, Gravitas.BaseFact.t()}
+  @spec init(any()) :: {:ok, Gravitas.BaseFactState.t()}
   def init(_args) do
-    {:ok, %Gravitas.BaseFact{}}
+    {:ok, %Gravitas.BaseFactState{}}
   end
 
   @impl true

@@ -12,14 +12,15 @@ defmodule Gravitas.Repo.Holder do
   from disk and then remove the row of the repo.
   """
 
-  @type repo_row :: {Path.t(), String.t(), Gravitas.Repo.event_type(), :init | :ready | :remove}
+  @type repo_row ::
+          {Path.t(), String.t(), Gravitas.Project.event_type(), :init | :ready | :remove}
 
   @spec start_link(Path.t()) :: :ignore | {:error, any()} | {:ok, pid()}
   def start_link(default) do
     GenServer.start_link(__MODULE__, %{dir_path: default, name: __MODULE__}, name: __MODULE__)
   end
 
-  @spec add_repo(String.t(), Gravitas.Repo.event_type()) :: any()
+  @spec add_repo(String.t(), Gravitas.Project.event_type()) :: any()
   def add_repo(remote_path, type) do
     GenServer.call(__MODULE__, {:add, remote_path, type})
   end
@@ -72,6 +73,7 @@ defmodule Gravitas.Repo.Holder do
       repo_name: local_path
     })
 
+    Gravitas.BaseFact.start_base_fact(%{repo_name: local_path})
     {:reply, :ok, dets_name}
   end
 

@@ -1,6 +1,6 @@
-defmodule Gravitas.Repo do
+defmodule Gravitas.Project do
   @moduledoc """
-  main interface for interfacing with Repos
+  main interface for interfacing with Projects
   """
   alias Gravitas.Repo
   @type event_type :: :git
@@ -17,6 +17,6 @@ defmodule Gravitas.Repo do
 
   @spec force_update(String.t(), event_type()) :: any()
   def force_update(repo_name, event_type) do
-    send({:via, Registry, {Registry.Gravitas, repo_name}}, {:fetch, event_type})
+    send({:via, Registry, {Registry.Gravitas.Repos, repo_name}}, {:fetch, event_type})
   end
 end

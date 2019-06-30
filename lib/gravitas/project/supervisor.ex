@@ -1,4 +1,4 @@
-defmodule Gravitas.Repo.Supervisor do
+defmodule Gravitas.Project.Supervisor do
   use Supervisor
 
   @spec start_link(any()) :: :ignore | {:error, any()} | {:ok, pid()}
@@ -19,7 +19,8 @@ defmodule Gravitas.Repo.Supervisor do
 
     children = [
       {Gravitas.Repo.Holder, [repo_path]},
-      {Gravitas.Repo.EventSupervisor, []}
+      {Gravitas.Project.ReposSupervisor, []},
+      {Gravitas.Project.BaseFactsSupervisor, []}
     ]
 
     Supervisor.init(children, strategy: :rest_for_one)

@@ -1,5 +1,6 @@
 defmodule Gravitas.Repo.EventGenerator do
   use GenServer, restart: :transient
+  alias Gravitas.Project
   alias Gravitas.Repo
 
   @moduledoc """
@@ -9,24 +10,25 @@ defmodule Gravitas.Repo.EventGenerator do
 
   Note: Regenerating Job Plan should be a blocking call, to avoid race conditions
   """
-  @type state() :: %{repo_name: Path.t(), type: Repo.event_type(), remote_path: String.t()}
+  @type state() :: %{repo_name: Path.t(), type: Project.event_type(), remote_path: String.t()}
 
   @spec start_link(state()) :: :ignore | {:error, any()} | {:ok, pid()}
   def start_link(%{repo_name: repo_name} = default) when is_map(default) do
     GenServer.start_link(__MODULE__, default,
-      name: {:via, Registry, {Registry.Gravitas, repo_name}}
+      name: {:via, Registry, {Registry.Gravitas.Repos, repo_name}}
     )
   end
 
-  @spec start_event_generator(Repo.EventGenerator.state()) :: DynamicSupervisor.on_start_child()
+  @spec start_event_generator(Repo.EventGenerator.state()) ::
+          DynamicSupervisor.on_start_child()
   def start_event_generator(state) do
     spec = {Repo.EventGenerator, [state]}
-    Repo.EventSupervisor.start_child(spec)
+    Project.ReposSupervisor.start_child(spec)
   end
 
   @spec terminate_event_generator(String.t()) :: :ok | {:error, :not_found}
   def terminate_event_generator(repo_name) do
-    GenServer.stop({:via, Registry, {Registry.Gravitas, repo_name}}, :normal)
+    GenServer.stop({:via, Registry, {Registry.Gravitas.Repos, repo_name}}, :normal)
   end
 
   @impl true

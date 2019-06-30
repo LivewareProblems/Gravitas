@@ -18,18 +18,19 @@ defmodule Gravitas do
   to be hold in its own git repository.
 
   Gravitas is made of different parts:
-  * `Gravitas.Repo`: Interface with the git repository of target state
+  * `Gravitas.Project`: Interface with the git repository of target state
   * `Gravitas.Providers`: Interface with the code interacting with cloud vendors
-  * `Gravitas.BaseFact`: Interface with the state of the cloud ressources as Gravitas know them
+  * `Gravitas.BaseFactState`: Interface with the state of the cloud ressources as Gravitas know them
   """
 
   @doc false
   @spec start(any(), any()) :: {:error, any()} | {:ok, pid()}
   def start(_type, _args) do
     children = [
-      {Registry, keys: :unique, name: Registry.Gravitas},
-      {Gravitas.Repo.Supervisor, []},
-      {Gravitas.BaseFact.Supervisor, []}
+      {Registry, keys: :unique, name: Registry.Gravitas.Repos},
+      {Registry, keys: :unique, name: Registry.Gravitas.BaseFacts},
+      {Gravitas.Project.Supervisor, []},
+      {Gravitas.BaseFactState.Supervisor, []}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one)

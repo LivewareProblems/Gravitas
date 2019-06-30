@@ -1,4 +1,4 @@
-defmodule Gravitas.Repo.EventSupervisor do
+defmodule Gravitas.Project.ReposSupervisor do
   use DynamicSupervisor
   alias Gravitas.Repo
 
@@ -19,7 +19,7 @@ defmodule Gravitas.Repo.EventSupervisor do
   @spec terminate_child(String.t()) :: :ok | {:error, :not_found}
   def terminate_child(name) do
     # technically we have a race condition here... what to do ?
-    [{pid, _value}] = Registry.lookup(Registry.Gravitas, name)
+    [{pid, _value}] = Registry.lookup(Registry.Gravitas.Repos, name)
     DynamicSupervisor.terminate_child(__MODULE__, pid)
   end
 
